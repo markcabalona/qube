@@ -42,11 +42,11 @@ class QubeTheme {
     tertiaryFixedDim: Color(0xff88d1eb),
     onTertiaryFixedVariant: Color(0xff004e60),
     surfaceDim: Color(0xff0f1511),
-    surfaceBright: Color(0xff353b36),
+    surfaceBright: Color(0xff26262B),
     surfaceContainerLowest: Color(0xff0a0f0c),
     surfaceContainerLow: Color(0xff171d19),
     surfaceContainer: Color(0xff1b211d),
-    surfaceContainerHigh: Color(0xff262b27),
+    surfaceContainerHigh: Color(0xff3B3B40),
     surfaceContainerHighest: Color(0xff303632),
   );
 
@@ -73,5 +73,17 @@ class QubeTheme {
         colorScheme: colorScheme,
         scaffoldBackgroundColor: colorScheme.surface,
         canvasColor: colorScheme.surface,
+        cardTheme: CardTheme(
+          color: colorScheme.surfaceBright,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(44),
+          ),
+        ),
+        filledButtonTheme: FilledButtonThemeData(
+          style: FilledButton.styleFrom(
+            backgroundColor: colorScheme.surfaceContainerHigh,
+            foregroundColor: colorScheme.onSurface,
+          ),
+        ),
       );
 }
