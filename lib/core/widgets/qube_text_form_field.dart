@@ -9,10 +9,14 @@ class QubeTextFormField extends StatefulWidget {
     super.key,
     this.hintText,
     this.validator,
+    this.keyboardType,
+    this.textInputAction,
   });
 
   final String? hintText;
   final Validator? validator;
+  final TextInputType? keyboardType;
+  final TextInputAction? textInputAction;
 
   @override
   State<QubeTextFormField> createState() => _QubeTextFormFieldState();
@@ -68,6 +72,9 @@ class _QubeTextFormFieldState extends State<QubeTextFormField> {
           child: TextFormField(
             focusNode: focusNode,
             controller: controller,
+            onTapOutside: (event) {
+              focusNode.unfocus();
+            },
             validator: (value) {
               hintText = widget.validator?.call(value);
               setState(() {
@@ -80,6 +87,8 @@ class _QubeTextFormFieldState extends State<QubeTextFormField> {
               });
               return null;
             },
+            keyboardType: widget.keyboardType,
+            textInputAction: widget.textInputAction,
             decoration: InputDecoration(
               hintText: hintText ?? widget.hintText,
               prefixIconConstraints: const BoxConstraints(),
