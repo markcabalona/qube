@@ -20,7 +20,7 @@ class QubeTheme {
     onError: Color(0xff690005),
     errorContainer: Color(0xff93000a),
     onErrorContainer: Color(0xffffdad6),
-    surface: Color(0xff0f1511),
+    surface: Color(0xff0E0E0E),
     onSurface: Color(0xffdfe4dd),
     onSurfaceVariant: Color(0xffc0c9c0),
     outline: Color(0xff8a938b),
@@ -84,6 +84,17 @@ class QubeTheme {
             backgroundColor: colorScheme.surfaceContainerHigh,
             foregroundColor: colorScheme.onSurface,
           ),
+        ),
+        chipTheme: ChipThemeData(
+          shape: RoundedRectangleBorder(
+            side: BorderSide.none,
+            borderRadius: BorderRadius.circular(44),
+          ),
+          side: BorderSide.none,
+          backgroundColor: colorScheme.surfaceBright,
+        ),
+        dividerTheme: DividerThemeData(
+          color: colorScheme.surfaceBright,
         ),
       );
 }
