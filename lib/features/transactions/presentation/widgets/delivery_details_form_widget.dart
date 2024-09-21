@@ -131,10 +131,13 @@ class _DeliverButton extends StatelessWidget {
         DeliveryDetailsFormState,
         ({
           bool isEnabled,
+          bool isSuccesful,
           String text,
         })>(
       selector: (state) {
         final isLoading = AppStatus.loading == state.status;
+        final isSuccesful = AppStatus.success == state.status;
+
         final fieldHasEmpty =
             state.name.isEmpty || state.email.isEmpty || state.phone.isEmpty;
         final isEnabled = !(isLoading || fieldHasEmpty);
@@ -144,14 +147,22 @@ class _DeliverButton extends StatelessWidget {
           AppStatus.success => 'Posted!',
           (_) => 'Ok',
         };
-        return (isEnabled: isEnabled, text: text);
+        return (
+          isEnabled: isEnabled,
+          isSuccesful: isSuccesful,
+          text: text,
+        );
       },
       builder: (context, state) {
         return SizedBox(
           width: double.infinity,
           child: FilledButton(
-            onPressed: state.isEnabled ? onTapDeliver : null,
-            child: state.isEnabled
+            onPressed:
+                state.isEnabled && !state.isSuccesful ? onTapDeliver : null,
+            style: FilledButton.styleFrom(
+              disabledForegroundColor: Colors.white
+            ),
+            child: state.isEnabled || state.isSuccesful
                 ? GradientWrapper(
                     child: Text(
                     state.text,
