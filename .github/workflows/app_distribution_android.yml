@@ -28,6 +28,12 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: 17
+          distribution: "temurin"
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -49,7 +55,7 @@ jobs:
         run: flutter analyze .
 
       - name: Build APK
-        run: flutter build apk --${{ github.event.inputs.build_type }} --split-debug-info=build/app/outputs/symbols --build-name="${{ github.event.inputs.build_name }}+.${{ github.run_number }}"
+        run: flutter build apk --${{ github.event.inputs.build_type }} --split-debug-info=build/app/outputs/symbols --build-name="${{ github.event.inputs.build_name }}+${{ github.run_number }}"
 
       # Upload generated APK to artifacts.
       - name: Upload APK to Artifacts
