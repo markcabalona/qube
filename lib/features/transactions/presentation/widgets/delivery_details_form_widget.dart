@@ -60,6 +60,7 @@ class _DetailsFormState extends State<_DetailsForm> {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final cubit = GetIt.instance<DeliveryDetailsFormCubit>();
     return Form(
       key: formKey,
       child: Column(
@@ -68,22 +69,37 @@ class _DetailsFormState extends State<_DetailsForm> {
             hintText: 'Enter name',
             keyboardType: TextInputType.name,
             textInputAction: TextInputAction.next,
+            onChanged: (value) {
+              cubit.updateForm(
+                name: value,
+              );
+            },
             validator: (key) => QubeTextfieldValidator.nonEmptyValidator(
               key,
               errorMessage: 'Enter name',
             ),
           ),
-          const QubeTextFormField(
+          QubeTextFormField(
             hintText: 'Enter e-mail',
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
             validator: QubeTextfieldValidator.validateEmail,
+            onChanged: (value) {
+              cubit.updateForm(
+                email: value,
+              );
+            },
           ),
-          const QubeTextFormField(
+          QubeTextFormField(
             hintText: 'Enter phone number',
             keyboardType: TextInputType.phone,
             textInputAction: TextInputAction.done,
             validator: QubeTextfieldValidator.validatePhoneNumber,
+            onChanged: (value) {
+              cubit.updateForm(
+                phone: value,
+              );
+            },
           ),
           const SizedBox(height: 10),
           _DeliverButton(
