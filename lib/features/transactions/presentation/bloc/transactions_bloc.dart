@@ -60,7 +60,7 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
     final result = await _repository.loadTransactions(
       limit: 10,
       offset: 0,
-      searchKeyword: state.searchParam,
+      searchKeyword: event.searchParam,
     );
 
     result.fold(
