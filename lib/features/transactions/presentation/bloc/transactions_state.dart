@@ -5,11 +5,13 @@ class TransactionsState extends Equatable {
   final AppStatus status;
   final bool shouldFetchMore;
   final String? searchParam;
+  final int stepNumber;
   const TransactionsState({
     this.transactions = const [],
     this.status = AppStatus.initial,
     this.shouldFetchMore = true,
     this.searchParam,
+    required this.stepNumber,
   });
 
   @override
@@ -18,6 +20,7 @@ class TransactionsState extends Equatable {
         status,
         searchParam,
         shouldFetchMore,
+        stepNumber,
       ];
 
   TransactionsState copyWith({
@@ -31,6 +34,7 @@ class TransactionsState extends Equatable {
       status: status ?? this.status,
       shouldFetchMore: shouldFetchMore ?? this.shouldFetchMore,
       searchParam: searchParam != null ? searchParam() : this.searchParam,
+      stepNumber: stepNumber,
     );
   }
 }

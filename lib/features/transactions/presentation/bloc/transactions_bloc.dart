@@ -12,11 +12,14 @@ part 'transactions_state.dart';
 
 class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
   final TransactionsRepository _repository;
-  TransactionsBloc({required TransactionsRepository repository})
-      : _repository = repository,
-        super(const TransactionsState()) {
+  TransactionsBloc({
+    required TransactionsRepository repository,
+    int stepNumber = 1,
+  })  : _repository = repository,
+        super(TransactionsState(stepNumber: stepNumber)) {
     on<LoadTransactionsEvent>(_loadTransactions);
     on<SearchTransactionsEvent>(_searchTransactions);
+    on<MoveToStepTwoEvent>(_moveToStepTwo);
   }
 
   FutureOr<void> _loadTransactions(
@@ -30,8 +33,9 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
 
     final result = await _repository.loadTransactions(
       limit: event.limit,
-      offset: state.transactions.length,
+      offset: event.isInitialLoad ? 0 : state.transactions.length,
       searchKeyword: state.searchParam,
+      stepNumber: state.stepNumber,
     );
 
     result.fold(
@@ -41,7 +45,9 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
       (transactions) => emit(state.copyWith(
         status: AppStatus.success,
         shouldFetchMore: transactions.length >= event.limit,
-        transactions: state.transactions + transactions,
+        transactions: event.isInitialLoad
+            ? transactions
+            : state.transactions + transactions,
       )),
     );
   }
@@ -63,6 +69,7 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
       limit: 10,
       offset: 0,
       searchKeyword: event.searchParam,
+      stepNumber: state.stepNumber,
     );
 
     result.fold(
@@ -74,6 +81,22 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
         shouldFetchMore: transactions.length >= 10,
         transactions: transactions,
       )),
+    );
+  }
+
+  FutureOr<void> _moveToStepTwo(
+    MoveToStepTwoEvent event,
+    Emitter<TransactionsState> emit,
+  ) async {
+    final transactions = [...state.transactions];
+    emit(state.copyWith(
+      transactions: transactions
+        ..removeWhere(
+          (element) => element.id == event.transactionId,
+        ),
+    ));
+    _repository.moveToStepTwo(
+      transactionId: event.transactionId,
     );
   }
 }

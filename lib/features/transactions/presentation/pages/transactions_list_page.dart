@@ -2,17 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:qube/core/enums/app_status.dart';
+import 'package:qube/core/enums/transaction_step.dart';
 import 'package:qube/core/widgets/shimmer_transaction_list_widget.dart';
 import 'package:qube/features/transactions/domain/entities/transaction.dart';
 import 'package:qube/features/transactions/presentation/bloc/transactions_bloc.dart';
-import 'package:qube/features/transactions/presentation/widgets/transactions_list_widet.dart';
+import 'package:qube/features/transactions/presentation/widgets/transaction_card.dart';
+import 'package:qube/features/transactions/presentation/widgets/transactions_list_builder.dart';
 
 class TransactionsListPage extends StatelessWidget {
   const TransactionsListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final bloc = GetIt.instance<TransactionsBloc>();
+    final bloc = GetIt.instance<TransactionsBloc>(
+      instanceName: TransactionStep.stepOne.name,
+    )..add(const LoadTransactionsEvent());
     return NotificationListener<ScrollMetricsNotification>(
       onNotification: (notification) {
         final shouldFetchMore = notification.metrics.pixels >=
@@ -26,9 +30,6 @@ class TransactionsListPage extends StatelessWidget {
       child: BlocBuilder<TransactionsBloc, TransactionsState>(
         bloc: bloc,
         buildWhen: (previous, current) {
-          if (current.status == AppStatus.initial) {
-            bloc.add(const LoadTransactionsEvent());
-          }
           return current.status == AppStatus.success;
         },
         builder: (context, state) {
@@ -59,8 +60,11 @@ class TransactionsListPage extends StatelessWidget {
         ),
       );
     } else {
-      return TransactionsListWidget(
+      return TransactionsListBuilder(
         transactions: transactions,
+        builder: (context, transaction) => TransactionCard(
+          transaction: transaction,
+        ),
       );
     }
   }

@@ -14,6 +14,7 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
     required int limit,
     required int offset,
     String? searchKeyword,
+    int stepNumber = 1,
   }) async {
     try {
       return Right(
@@ -21,6 +22,25 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
           limit: limit,
           offset: offset,
           searchKeyword: searchKeyword,
+          stepNumber: stepNumber,
+        ),
+      );
+    } catch (e) {
+      // TODO: Do something with exception here
+      return Left(QubeFailure(
+        errorMessage: e.toString(),
+      ));
+    }
+  }
+
+  @override
+  Future<Either<QubeFailure, void>> moveToStepTwo({
+    required String transactionId,
+  }) async {
+    try {
+      return Right(
+        await dataSource.moveToStepTwo(
+          transactionId: transactionId,
         ),
       );
     } catch (e) {

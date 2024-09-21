@@ -5,5 +5,10 @@ abstract interface class TransactionsDatasource {
     required int limit,
     required int offset,
     String? searchKeyword,
+    int stepNumber = 1,
+  });
+
+  Future<void> moveToStepTwo({
+    required String transactionId,
   });
 }

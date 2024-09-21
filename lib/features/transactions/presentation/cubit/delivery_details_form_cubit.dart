@@ -3,11 +3,15 @@ import 'dart:math';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:qube/core/enums/app_status.dart';
+import 'package:qube/features/transactions/domain/entities/transaction.dart';
 
 part 'delivery_details_form_state.dart';
 
 class DeliveryDetailsFormCubit extends Cubit<DeliveryDetailsFormState> {
-  DeliveryDetailsFormCubit() : super(const DeliveryDetailsFormState());
+  DeliveryDetailsFormCubit(Transaction transaction)
+      : super(DeliveryDetailsFormState(
+          transaction: transaction,
+        ));
 
   void updateForm({
     String? name,

@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:qube/core/extensions/date_time_extension.dart';
 import 'package:qube/features/transactions/domain/entities/transaction.dart';
 import 'package:qube/features/transactions/presentation/widgets/due_date_chip.dart';
-import 'package:qube/features/transactions/presentation/widgets/transaction_card.dart';
 
-class TransactionsListWidget extends StatelessWidget {
-  const TransactionsListWidget({
+class TransactionsListBuilder extends StatelessWidget {
+  const TransactionsListBuilder({
     super.key,
     required this.transactions,
+    required this.builder,
   });
 
   final List<Transaction> transactions;
+  final Widget Function(BuildContext context, Transaction transaction) builder;
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +35,11 @@ class TransactionsListWidget extends StatelessWidget {
           return Column(
             children: [
               _buildDueDateChip(transaction.dueDate),
-              _buildTranscationCard(transaction),
+              builder(context, transaction),
             ],
           );
         }
-        return _buildTranscationCard(transaction);
+        return builder(context, transaction);
       },
     );
   }
@@ -46,12 +47,6 @@ class TransactionsListWidget extends StatelessWidget {
   DueDateChip _buildDueDateChip(DateTime dueDate) {
     return DueDateChip(
       dueDate: dueDate,
-    );
-  }
-
-  TransactionCard _buildTranscationCard(Transaction transaction) {
-    return TransactionCard(
-      transaction: transaction,
     );
   }
 }
