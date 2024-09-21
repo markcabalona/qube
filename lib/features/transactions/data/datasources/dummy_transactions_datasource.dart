@@ -5,7 +5,7 @@ import 'package:qube/features/transactions/domain/entities/qube_user.dart';
 import 'package:qube/features/transactions/domain/entities/transaction.dart';
 
 class DummyTransactionsDatasource implements TransactionsDatasource {
-  final List<Transaction> _dummyData = List.generate(
+  List<Transaction> _dummyData = List.generate(
     1000,
     (index) {
       final createdAt = DateTime.now().subtract(
@@ -65,5 +65,28 @@ class DummyTransactionsDatasource implements TransactionsDatasource {
         .skip(offset)
         .take(limit)
         .toList();
+  }
+
+  @override
+  Future<void> moveToStepTwo({
+    required String transactionId,
+  }) async {
+    _dummyData = _dummyData.map(
+      (e) {
+        if (e.id == transactionId) {
+          return Transaction(
+            id: e.id,
+            transactionNumber: e.transactionNumber,
+            sender: e.sender,
+            recipient: e.recipient,
+            items: e.items,
+            createdAt: e.createdAt,
+            dueDate: e.dueDate,
+            stepNumber: 2,
+          );
+        }
+        return e;
+      },
+    ).toList();
   }
 }

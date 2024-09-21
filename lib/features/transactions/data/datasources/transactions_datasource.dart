@@ -7,4 +7,8 @@ abstract interface class TransactionsDatasource {
     String? searchKeyword,
     int stepNumber = 1,
   });
+
+  Future<void> moveToStepTwo({
+    required String transactionId,
+  });
 }
