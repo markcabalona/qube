@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:qube/core/enums/app_status.dart';
 import 'package:qube/core/extensions/date_time_extension.dart';
+import 'package:qube/core/router/qube_router.dart';
+import 'package:qube/core/router/routes/qube_routes.dart';
 import 'package:qube/core/utils/qube_textfield_validator.dart';
 import 'package:qube/core/widgets/gradient_wrapper.dart';
 import 'package:qube/core/widgets/qube_text_form_field.dart';
@@ -60,7 +62,7 @@ class _DetailsFormState extends State<_DetailsForm> {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    final cubit = GetIt.instance<DeliveryDetailsFormCubit>();
+    final cubit = BlocProvider.of<DeliveryDetailsFormCubit>(context);
     return Form(
       key: formKey,
       child: Column(
@@ -103,16 +105,18 @@ class _DetailsFormState extends State<_DetailsForm> {
           ),
           const SizedBox(height: 10),
           _DeliverButton(
-            onTapDeliver: _onTapDeliver,
+            onTapDeliver: () {
+              _onTapDeliver(cubit);
+            },
           ),
         ],
       ),
     );
   }
 
-  void _onTapDeliver() {
+  void _onTapDeliver(DeliveryDetailsFormCubit cubit) {
     if (formKey.currentState?.validate() == true) {
-      GetIt.instance<DeliveryDetailsFormCubit>().submitForm();
+      cubit.submitForm();
     }
   }
 }
@@ -147,6 +151,15 @@ class _DeliverButton extends StatelessWidget {
           AppStatus.success => 'Posted!',
           (_) => 'Ok',
         };
+
+        if (isSuccesful) {
+          SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+            Future.delayed(
+              const Duration(seconds: 1),
+              () => QubeRouter.go(QubeRoutes.transactions),
+            );
+          });
+        }
         return (
           isEnabled: isEnabled,
           isSuccesful: isSuccesful,
@@ -160,7 +173,7 @@ class _DeliverButton extends StatelessWidget {
             onPressed:
                 state.isEnabled && !state.isSuccesful ? onTapDeliver : null,
             style: FilledButton.styleFrom(
-              disabledForegroundColor: Colors.white
+              disabledForegroundColor: Colors.white,
             ),
             child: state.isEnabled || state.isSuccesful
                 ? GradientWrapper(

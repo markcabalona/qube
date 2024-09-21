@@ -27,7 +27,7 @@ void initializeTransactionsBlocs() {
   GetIt.instance.registerLazySingleton(
     () => TransactionStepCubit(),
   );
-  GetIt.instance.registerLazySingleton(
+  GetIt.instance.registerFactory(
     () => DeliveryDetailsFormCubit(),
   );
 }

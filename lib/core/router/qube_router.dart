@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:qube/core/router/routes/qube_routes.dart';
 import 'package:qube/core/router/routes/transactions_routes.dart';
 import 'package:qube/features/transactions/presentation/bloc/transactions_bloc.dart';
-import 'package:qube/features/transactions/presentation/cubit/delivery_details_form_cubit.dart';
 import 'package:qube/features/transactions/presentation/cubit/transaction_step_cubit.dart';
 import 'package:qube/features/transactions/presentation/pages/qube_home_page.dart';
 
@@ -29,9 +28,6 @@ class QubeRouter {
             ),
             BlocProvider(
               create: (context) => GetIt.instance<TransactionStepCubit>(),
-            ),
-            BlocProvider(
-              create: (context) => GetIt.instance<DeliveryDetailsFormCubit>(),
             ),
           ],
           child: QubeHomePage(
