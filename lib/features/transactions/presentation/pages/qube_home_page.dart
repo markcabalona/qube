@@ -34,27 +34,30 @@ class QubeHomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(height: 12),
-          const SearchTransactionWidget(),
-          const SizedBox(height: 12),
-          QubeStepperWidget(
-            index: 1,
-            children: List.generate(
-              2,
-              (index) => Text(
-                'Step ${index + 1}',
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 12),
+            const SearchTransactionWidget(),
+            const SizedBox(height: 12),
+            QubeStepperWidget(
+              index: 0,
+              children: List.generate(
+                2,
+                (index) => Text(
+                  'Step ${index + 1}',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 12),
-          Expanded(child: child),
-        ],
+            const SizedBox(height: 12),
+            Expanded(child: child),
+          ],
+        ),
       ),
     );
   }
