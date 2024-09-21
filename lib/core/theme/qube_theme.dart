@@ -96,5 +96,10 @@ class QubeTheme {
         dividerTheme: DividerThemeData(
           color: colorScheme.surfaceBright,
         ),
+        inputDecorationTheme: const InputDecorationTheme(
+          border: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          contentPadding: EdgeInsets.zero,
+        ),
       );
 }

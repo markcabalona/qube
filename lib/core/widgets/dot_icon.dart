@@ -6,13 +6,17 @@ class DotIcon extends StatelessWidget {
     super.key,
     this.color,
     this.gradient,
+    this.size = 10,
   }) : isFilled = true;
 
   const DotIcon.outlined({
     super.key,
     this.color,
     this.gradient,
+    this.size = 10,
   }) : isFilled = false;
+
+  final double size;
   final bool isFilled;
   final Color? color;
   final Gradient? gradient;
@@ -23,7 +27,7 @@ class DotIcon extends StatelessWidget {
     final icon = Icon(
       isFilled ? Icons.circle : Icons.circle_outlined,
       color: color,
-      size: 10,
+      size: size,
     );
     if (color == null) {
       return GradientWrapper(
