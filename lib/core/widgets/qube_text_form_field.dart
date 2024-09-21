@@ -3,18 +3,21 @@ import 'package:qube/core/widgets/dot_icon.dart';
 import 'package:qube/core/widgets/gradient_wrapper.dart';
 
 typedef Validator = String? Function(String? key);
+typedef OnChanged = void Function(String? value);
 
 class QubeTextFormField extends StatefulWidget {
   const QubeTextFormField({
     super.key,
     this.hintText,
     this.validator,
+    this.onChanged,
     this.keyboardType,
     this.textInputAction,
   });
 
   final String? hintText;
   final Validator? validator;
+  final OnChanged? onChanged;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
 
@@ -85,13 +88,24 @@ class _QubeTextFormFieldState extends State<QubeTextFormField> {
                   mainColor = Theme.of(context).colorScheme.error;
                 }
               });
-              return null;
+              return hintText != null ? '' : hintText;
+            },
+            onChanged: (value) {
+              if (mainColor != null || hintText != null) {
+                setState(() {
+                  mainColor = null;
+                  hintText = null;
+                });
+              }
+
+              widget.onChanged?.call(value);
             },
             keyboardType: widget.keyboardType,
             textInputAction: widget.textInputAction,
             decoration: InputDecoration(
               hintText: hintText ?? widget.hintText,
               prefixIconConstraints: const BoxConstraints(),
+              errorStyle: const TextStyle(fontSize: 0),
               prefixIcon: Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: DotIcon.filled(

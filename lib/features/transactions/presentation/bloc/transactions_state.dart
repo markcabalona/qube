@@ -1,7 +1,5 @@
 part of 'transactions_bloc.dart';
 
-enum AppStatus { initial, loading, success, error, done }
-
 class TransactionsState extends Equatable {
   final List<Transaction> transactions;
   final AppStatus status;

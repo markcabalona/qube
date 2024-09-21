@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qube/core/router/routes/qube_routes.dart';
 import 'package:qube/features/transactions/domain/entities/transaction.dart';
+import 'package:qube/features/transactions/presentation/cubit/delivery_details_form_cubit.dart';
 import 'package:qube/features/transactions/presentation/cubit/transaction_step_cubit.dart';
 import 'package:qube/features/transactions/presentation/pages/delivery_details_page.dart';
 import 'package:qube/features/transactions/presentation/pages/transactions_list_page.dart';
@@ -36,8 +38,11 @@ abstract class TransactionsRoutes {
     pageBuilder: (context, state) {
       GetIt.instance<TransactionStepCubit>().goToStepTwo();
       return MaterialPage(
-        child: DeliveryDetailsPage(
-          transaction: state.extra as Transaction,
+        child: BlocProvider(
+          create: (context) => GetIt.instance<DeliveryDetailsFormCubit>(),
+          child: DeliveryDetailsPage(
+            transaction: state.extra as Transaction,
+          ),
         ),
       );
     },

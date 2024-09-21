@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qube/core/enums/app_status.dart';
 import 'package:qube/core/extensions/date_time_extension.dart';
+import 'package:qube/core/router/qube_router.dart';
+import 'package:qube/core/router/routes/qube_routes.dart';
 import 'package:qube/core/utils/qube_textfield_validator.dart';
 import 'package:qube/core/widgets/gradient_wrapper.dart';
 import 'package:qube/core/widgets/qube_text_form_field.dart';
 import 'package:qube/features/transactions/domain/entities/transaction.dart';
+import 'package:qube/features/transactions/presentation/cubit/delivery_details_form_cubit.dart';
 
 class DeliveryDetailsFormWidget extends StatelessWidget {
   const DeliveryDetailsFormWidget({
@@ -56,6 +62,7 @@ class _DetailsFormState extends State<_DetailsForm> {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final cubit = BlocProvider.of<DeliveryDetailsFormCubit>(context);
     return Form(
       key: formKey,
       child: Column(
@@ -64,43 +71,119 @@ class _DetailsFormState extends State<_DetailsForm> {
             hintText: 'Enter name',
             keyboardType: TextInputType.name,
             textInputAction: TextInputAction.next,
+            onChanged: (value) {
+              cubit.updateForm(
+                name: value,
+              );
+            },
             validator: (key) => QubeTextfieldValidator.nonEmptyValidator(
               key,
               errorMessage: 'Enter name',
             ),
           ),
-          const QubeTextFormField(
+          QubeTextFormField(
             hintText: 'Enter e-mail',
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
             validator: QubeTextfieldValidator.validateEmail,
+            onChanged: (value) {
+              cubit.updateForm(
+                email: value,
+              );
+            },
           ),
-          const QubeTextFormField(
+          QubeTextFormField(
             hintText: 'Enter phone number',
             keyboardType: TextInputType.phone,
             textInputAction: TextInputAction.done,
             validator: QubeTextfieldValidator.validatePhoneNumber,
+            onChanged: (value) {
+              cubit.updateForm(
+                phone: value,
+              );
+            },
           ),
           const SizedBox(height: 10),
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton(
-              onPressed: _onTapDeliver,
-              child: const GradientWrapper(
-                child: Text(
-                  'Deliver',
-                ),
-              ),
-            ),
+          _DeliverButton(
+            onTapDeliver: () {
+              _onTapDeliver(cubit);
+            },
           ),
         ],
       ),
     );
   }
 
-  void _onTapDeliver() {
+  void _onTapDeliver(DeliveryDetailsFormCubit cubit) {
     if (formKey.currentState?.validate() == true) {
-      // TODO: Trigger deliver action
+      cubit.submitForm();
     }
+  }
+}
+
+class _DeliverButton extends StatelessWidget {
+  const _DeliverButton({
+    super.key,
+    required this.onTapDeliver,
+  });
+  final VoidCallback onTapDeliver;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocSelector<
+        DeliveryDetailsFormCubit,
+        DeliveryDetailsFormState,
+        ({
+          bool isEnabled,
+          bool isSuccesful,
+          String text,
+        })>(
+      selector: (state) {
+        final isLoading = AppStatus.loading == state.status;
+        final isSuccesful = AppStatus.success == state.status;
+
+        final fieldHasEmpty =
+            state.name.isEmpty || state.email.isEmpty || state.phone.isEmpty;
+        final isEnabled = !(isLoading || fieldHasEmpty);
+        final text = switch (state.status) {
+          AppStatus.initial => 'Deliver',
+          AppStatus.loading => 'Posting',
+          AppStatus.success => 'Posted!',
+          (_) => 'Ok',
+        };
+
+        if (isSuccesful) {
+          SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+            Future.delayed(
+              const Duration(seconds: 1),
+              () => QubeRouter.go(QubeRoutes.transactions),
+            );
+          });
+        }
+        return (
+          isEnabled: isEnabled,
+          isSuccesful: isSuccesful,
+          text: text,
+        );
+      },
+      builder: (context, state) {
+        return SizedBox(
+          width: double.infinity,
+          child: FilledButton(
+            onPressed:
+                state.isEnabled && !state.isSuccesful ? onTapDeliver : null,
+            style: FilledButton.styleFrom(
+              disabledForegroundColor: Colors.white,
+            ),
+            child: state.isEnabled || state.isSuccesful
+                ? GradientWrapper(
+                    child: Text(
+                    state.text,
+                  ))
+                : Text(state.text),
+          ),
+        );
+      },
+    );
   }
 }
