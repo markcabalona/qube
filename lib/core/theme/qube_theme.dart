@@ -67,6 +67,22 @@ class QubeTheme {
     );
   }
 
+  static LinearGradient shimmerLinearGradient([ThemeMode? themeMode]) {
+    return LinearGradient(
+      stops: const [-.5, 0, 1],
+      end: Alignment.centerRight,
+      begin: Alignment.centerLeft,
+      colors: switch (themeMode) {
+        ThemeMode.light => throw UnimplementedError(),
+        (_) => [
+            darkScheme.surface,
+            Colors.transparent,
+            darkScheme.surface,
+          ]
+      },
+    );
+  }
+
   ThemeData theme(ColorScheme colorScheme) => ThemeData(
         useMaterial3: true,
         brightness: colorScheme.brightness,
