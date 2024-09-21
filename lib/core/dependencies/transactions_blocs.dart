@@ -4,6 +4,7 @@ import 'package:qube/features/transactions/data/datasources/transactions_datasou
 import 'package:qube/features/transactions/data/repositories/transactions_repository_impl.dart';
 import 'package:qube/features/transactions/domain/repositories/transactions_repository.dart';
 import 'package:qube/features/transactions/presentation/bloc/transactions_bloc.dart';
+import 'package:qube/features/transactions/presentation/cubit/delivery_details_form_cubit.dart';
 import 'package:qube/features/transactions/presentation/cubit/transaction_step_cubit.dart';
 
 void initializeTransactionsBlocs() {
@@ -25,5 +26,8 @@ void initializeTransactionsBlocs() {
 
   GetIt.instance.registerLazySingleton(
     () => TransactionStepCubit(),
+  );
+  GetIt.instance.registerLazySingleton(
+    () => DeliveryDetailsFormCubit(),
   );
 }

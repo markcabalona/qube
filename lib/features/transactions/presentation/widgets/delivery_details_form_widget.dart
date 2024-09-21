@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:qube/core/enums/app_status.dart';
 import 'package:qube/core/extensions/date_time_extension.dart';
 import 'package:qube/core/utils/qube_textfield_validator.dart';
 import 'package:qube/core/widgets/gradient_wrapper.dart';
 import 'package:qube/core/widgets/qube_text_form_field.dart';
 import 'package:qube/features/transactions/domain/entities/transaction.dart';
+import 'package:qube/features/transactions/presentation/cubit/delivery_details_form_cubit.dart';
 
 class DeliveryDetailsFormWidget extends StatelessWidget {
   const DeliveryDetailsFormWidget({
@@ -82,16 +86,8 @@ class _DetailsFormState extends State<_DetailsForm> {
             validator: QubeTextfieldValidator.validatePhoneNumber,
           ),
           const SizedBox(height: 10),
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton(
-              onPressed: _onTapDeliver,
-              child: const GradientWrapper(
-                child: Text(
-                  'Deliver',
-                ),
-              ),
-            ),
+          _DeliverButton(
+            onTapDeliver: _onTapDeliver,
           ),
         ],
       ),
@@ -100,7 +96,54 @@ class _DetailsFormState extends State<_DetailsForm> {
 
   void _onTapDeliver() {
     if (formKey.currentState?.validate() == true) {
-      // TODO: Trigger deliver action
+      GetIt.instance<DeliveryDetailsFormCubit>().submitForm();
     }
+  }
+}
+
+class _DeliverButton extends StatelessWidget {
+  const _DeliverButton({
+    super.key,
+    required this.onTapDeliver,
+  });
+  final VoidCallback onTapDeliver;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocSelector<
+        DeliveryDetailsFormCubit,
+        DeliveryDetailsFormState,
+        ({
+          bool isEnabled,
+          String text,
+        })>(
+      selector: (state) {
+        final isLoading = AppStatus.loading == state.status;
+        final fieldHasEmpty =
+            state.name.isEmpty || state.email.isEmpty || state.phone.isEmpty;
+        final isEnabled = !(isLoading || fieldHasEmpty);
+        final text = switch (state.status) {
+          AppStatus.initial => 'Deliver',
+          AppStatus.loading => 'Posting',
+          AppStatus.success => 'Posted!',
+          (_) => 'Ok',
+        };
+        return (isEnabled: isEnabled, text: text);
+      },
+      builder: (context, state) {
+        return SizedBox(
+          width: double.infinity,
+          child: FilledButton(
+            onPressed: state.isEnabled ? onTapDeliver : null,
+            child: state.isEnabled
+                ? GradientWrapper(
+                    child: Text(
+                    state.text,
+                  ))
+                : Text(state.text),
+          ),
+        );
+      },
+    );
   }
 }
