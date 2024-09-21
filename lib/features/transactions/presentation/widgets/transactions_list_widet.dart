@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qube/core/extensions/date_time_extension.dart';
 import 'package:qube/features/transactions/domain/entities/transaction.dart';
+import 'package:qube/features/transactions/presentation/widgets/due_date_chip.dart';
 import 'package:qube/features/transactions/presentation/widgets/transaction_card.dart';
 
 class TransactionsListWidget extends StatelessWidget {
@@ -42,22 +43,9 @@ class TransactionsListWidget extends StatelessWidget {
     );
   }
 
-  Row _buildDueDateChip(DateTime dueDate) {
-    return Row(
-      children: [
-        const Expanded(child: Divider()),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Chip(
-            label: Text(
-              dueDate.toFormattedString(
-                'MMMM dd, yyyy',
-              ),
-            ),
-          ),
-        ),
-        const Expanded(child: Divider()),
-      ],
+  DueDateChip _buildDueDateChip(DateTime dueDate) {
+    return DueDateChip(
+      dueDate: dueDate,
     );
   }
 
