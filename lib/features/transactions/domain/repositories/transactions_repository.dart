@@ -9,4 +9,8 @@ abstract interface class TransactionsRepository {
     String? searchKeyword,
     int stepNumber = 1,
   });
+
+  Future<Either<QubeFailure, void>> moveToStepTwo({
+    required String transactionId,
+  });
 }

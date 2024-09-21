@@ -32,4 +32,22 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
       ));
     }
   }
+
+  @override
+  Future<Either<QubeFailure, void>> moveToStepTwo({
+    required String transactionId,
+  }) async {
+    try {
+      return Right(
+        await dataSource.moveToStepTwo(
+          transactionId: transactionId,
+        ),
+      );
+    } catch (e) {
+      // TODO: Do something with exception here
+      return Left(QubeFailure(
+        errorMessage: e.toString(),
+      ));
+    }
+  }
 }
