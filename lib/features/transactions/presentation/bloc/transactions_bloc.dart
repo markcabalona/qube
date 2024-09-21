@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:qube/core/enums/app_status.dart';
 import 'package:qube/features/transactions/domain/entities/transaction.dart';
 import 'package:qube/features/transactions/domain/repositories/transactions_repository.dart';
 
