@@ -50,9 +50,7 @@ class DeliveryDetailsFormWidget extends StatelessWidget {
 }
 
 class _DetailsForm extends StatefulWidget {
-  const _DetailsForm({
-    super.key,
-  });
+  const _DetailsForm();
 
   @override
   State<_DetailsForm> createState() => _DetailsFormState();
@@ -123,7 +121,6 @@ class _DetailsFormState extends State<_DetailsForm> {
 
 class _DeliverButton extends StatelessWidget {
   const _DeliverButton({
-    super.key,
     required this.onTapDeliver,
   });
   final VoidCallback onTapDeliver;
