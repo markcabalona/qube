@@ -7,5 +7,6 @@ abstract interface class TransactionsRepository {
     required int limit,
     required int offset,
     String? searchKeyword,
+    int stepNumber = 1,
   });
 }

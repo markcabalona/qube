@@ -14,6 +14,7 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
     required int limit,
     required int offset,
     String? searchKeyword,
+    int stepNumber = 1,
   }) async {
     try {
       return Right(
@@ -21,6 +22,7 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
           limit: limit,
           offset: offset,
           searchKeyword: searchKeyword,
+          stepNumber: stepNumber,
         ),
       );
     } catch (e) {
