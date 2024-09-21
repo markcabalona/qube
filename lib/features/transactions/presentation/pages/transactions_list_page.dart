@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:qube/core/enums/app_status.dart';
+import 'package:qube/core/widgets/shimmer_transaction_list_widget.dart';
 import 'package:qube/features/transactions/domain/entities/transaction.dart';
 import 'package:qube/features/transactions/presentation/bloc/transactions_bloc.dart';
 import 'package:qube/features/transactions/presentation/widgets/transactions_list_widet.dart';
@@ -39,7 +40,7 @@ class TransactionsListPage extends StatelessWidget {
                 context,
                 transactions: state.transactions,
               ),
-            (_) => const SizedBox(),
+            (_) => const ShimmerTransactionsListWidget(),
           };
         },
       ),
