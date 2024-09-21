@@ -6,4 +6,5 @@ class TransactionStepCubit extends Cubit<TransactionStep> {
 
   void goToStepOne() => emit(TransactionStep.stepOne);
   void goToStepTwo() => emit(TransactionStep.stepTwo);
+  void goToStep(TransactionStep step) => emit(step);
 }

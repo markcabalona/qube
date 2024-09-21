@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:qube/core/enums/transaction_step.dart';
 import 'package:qube/core/extensions/date_time_extension.dart';
-import 'package:qube/core/router/qube_router.dart';
-import 'package:qube/core/router/routes/qube_routes.dart';
 import 'package:qube/core/widgets/dot_icon.dart';
 import 'package:qube/core/widgets/gradient_wrapper.dart';
 import 'package:qube/core/widgets/warning_icon.dart';
 import 'package:qube/features/transactions/domain/entities/transaction.dart';
+import 'package:qube/features/transactions/presentation/bloc/transactions_bloc.dart';
 
 class TransactionCard extends StatelessWidget {
   const TransactionCard({
@@ -93,9 +94,8 @@ class TransactionCard extends StatelessWidget {
   }
 
   void _onPressGoToStep2() {
-    QubeRouter.go(
-      QubeRoutes.deliveryDetails,
-      extra: transaction,
-    );
+    GetIt.instance<TransactionsBloc>(
+      instanceName: TransactionStep.stepOne.name,
+    ).add(MoveToStepTwoEvent(transactionId: transaction.id));
   }
 }
