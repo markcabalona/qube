@@ -1,14 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:qube/core/utils/debounce.dart';
 
-class SearchTransactionWidget extends StatelessWidget {
+class SearchTransactionWidget extends StatefulWidget {
   const SearchTransactionWidget({
     super.key,
   });
 
   @override
+  State<SearchTransactionWidget> createState() =>
+      _SearchTransactionWidgetState();
+}
+
+class _SearchTransactionWidgetState extends State<SearchTransactionWidget> {
+  final debounce = Debounce();
+  @override
+  void dispose() {
+    debounce.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final debounce = Debounce();
     return TextField(
       onTapOutside: (event) {
         FocusManager.instance.primaryFocus?.unfocus();
