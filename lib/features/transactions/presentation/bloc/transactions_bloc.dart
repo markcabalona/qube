@@ -12,9 +12,11 @@ part 'transactions_state.dart';
 
 class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
   final TransactionsRepository _repository;
-  TransactionsBloc({required TransactionsRepository repository})
-      : _repository = repository,
-        super(const TransactionsState()) {
+  TransactionsBloc({
+    required TransactionsRepository repository,
+    int stepNumber = 1,
+  })  : _repository = repository,
+        super(TransactionsState(stepNumber: stepNumber)) {
     on<LoadTransactionsEvent>(_loadTransactions);
     on<SearchTransactionsEvent>(_searchTransactions);
   }
@@ -32,6 +34,7 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
       limit: event.limit,
       offset: state.transactions.length,
       searchKeyword: state.searchParam,
+      stepNumber: state.stepNumber,
     );
 
     result.fold(
@@ -63,6 +66,7 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
       limit: 10,
       offset: 0,
       searchKeyword: event.searchParam,
+      stepNumber: state.stepNumber,
     );
 
     result.fold(

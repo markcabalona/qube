@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:qube/core/enums/transaction_step.dart';
 import 'package:qube/core/widgets/gradient_wrapper.dart';
 import 'package:qube/core/widgets/qube_stepper_widget.dart';
 import 'package:qube/features/transactions/presentation/cubit/transaction_step_cubit.dart';
