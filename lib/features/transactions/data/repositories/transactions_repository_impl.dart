@@ -1,0 +1,33 @@
+import 'package:dartz/dartz.dart';
+import 'package:qube/core/error/failures/qube_failure.dart';
+import 'package:qube/features/transactions/data/datasources/transactions_datasource.dart';
+import 'package:qube/features/transactions/domain/entities/transaction.dart';
+import 'package:qube/features/transactions/domain/repositories/transactions_repository.dart';
+
+class TransactionsRepositoryImpl implements TransactionsRepository {
+  final TransactionsDatasource dataSource;
+  TransactionsRepositoryImpl({
+    required this.dataSource,
+  });
+  @override
+  Future<Either<QubeFailure, List<Transaction>>> loadTransactions({
+    required int limit,
+    required int offset,
+    String? searchKeyword,
+  }) async {
+    try {
+      return Right(
+        await dataSource.loadTransactions(
+          limit: limit,
+          offset: offset,
+          searchKeyword: searchKeyword,
+        ),
+      );
+    } catch (e) {
+      // TODO: Do something with exception here
+      return Left(QubeFailure(
+        errorMessage: e.toString(),
+      ));
+    }
+  }
+}
