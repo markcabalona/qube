@@ -6,7 +6,8 @@ import 'package:qube/core/enums/transaction_step.dart';
 import 'package:qube/core/widgets/shimmer_transaction_list_widget.dart';
 import 'package:qube/features/transactions/domain/entities/transaction.dart';
 import 'package:qube/features/transactions/presentation/bloc/transactions_bloc.dart';
-import 'package:qube/features/transactions/presentation/widgets/transactions_list_widet.dart';
+import 'package:qube/features/transactions/presentation/widgets/transaction_card.dart';
+import 'package:qube/features/transactions/presentation/widgets/transactions_list_builder.dart';
 
 class TransactionsListPage extends StatelessWidget {
   const TransactionsListPage({super.key});
@@ -59,8 +60,11 @@ class TransactionsListPage extends StatelessWidget {
         ),
       );
     } else {
-      return TransactionsListWidget(
+      return TransactionsListBuilder(
         transactions: transactions,
+        builder: (context, transaction) => TransactionCard(
+          transaction: transaction,
+        ),
       );
     }
   }
