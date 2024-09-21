@@ -38,8 +38,7 @@ class QubeStepperWidget extends StatelessWidget {
               ),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: children,
+              children: children.map((e) => Expanded(child: e)).toList(),
             ),
           ],
         ),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:qube/core/enums/transaction_step.dart';
+import 'package:qube/core/router/qube_router.dart';
+import 'package:qube/core/router/routes/qube_routes.dart';
 import 'package:qube/core/widgets/gradient_wrapper.dart';
 import 'package:qube/core/widgets/qube_stepper_widget.dart';
 import 'package:qube/features/transactions/presentation/cubit/transaction_step_cubit.dart';
@@ -55,21 +57,39 @@ class QubeHomePage extends StatelessWidget {
     );
   }
 
-  BlocBuilder<TransactionStepCubit, TransactionStep> _buildStepperWidget() {
-    return BlocBuilder<TransactionStepCubit, TransactionStep>(
+  BlocConsumer<TransactionStepCubit, TransactionStep> _buildStepperWidget() {
+    return BlocConsumer<TransactionStepCubit, TransactionStep>(
       bloc: GetIt.instance(),
+      listener: (context, state) {
+        switch (state) {
+          case TransactionStep.stepOne:
+            QubeRouter.go(QubeRoutes.transactions);
+            break;
+          case TransactionStep.stepTwo:
+            QubeRouter.go(QubeRoutes.deliveryDetails);
+            break;
+          default:
+        }
+      },
       builder: (context, state) {
         return QubeStepperWidget(
           index: state.value,
-          children: List.generate(
-            2,
-            (index) => Text(
-              'Step ${index + 1}',
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
+          children: TransactionStep.values
+              .map(
+                (step) => GestureDetector(
+                  onTap: () {
+                    GetIt.instance<TransactionStepCubit>().goToStep(step);
+                  },
+                  child: Text(
+                    'Step ${step.value + 1}',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              )
+              .toList(),
         );
       },
     );
