@@ -93,7 +93,6 @@ class TransactionCard extends StatelessWidget {
   }
 
   void _onPressGoToStep2() {
-    // TODO: Navigate to Step 2 Page
     QubeRouter.go(
       QubeRoutes.deliveryDetails,
       extra: transaction,
