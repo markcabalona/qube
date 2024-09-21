@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:qube/features/transactions/data/datasources/dummy_transactions_datasource.dart';
 import 'package:qube/features/transactions/data/datasources/transactions_datasource.dart';
 import 'package:qube/features/transactions/data/repositories/transactions_repository_impl.dart';
 import 'package:qube/features/transactions/domain/repositories/transactions_repository.dart';
@@ -7,7 +8,7 @@ import 'package:qube/features/transactions/presentation/cubit/transaction_step_c
 
 void initializeTransactionsBlocs() {
   GetIt.instance.registerLazySingleton<TransactionsDatasource>(
-    () => throw UnimplementedError(),
+    () => DummyTransactionsDatasource(),
   );
 
   GetIt.instance.registerLazySingleton<TransactionsRepository>(

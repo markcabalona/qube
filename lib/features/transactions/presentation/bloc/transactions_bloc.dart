@@ -26,6 +26,7 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
     emit(state.copyWith(
       status: AppStatus.loading,
     ));
+
     final result = await _repository.loadTransactions(
       limit: event.limit,
       offset: state.transactions.length,
@@ -38,7 +39,7 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
       )),
       (transactions) => emit(state.copyWith(
         status: AppStatus.success,
-        shouldFetchMore: transactions.length < event.limit,
+        shouldFetchMore: transactions.length >= event.limit,
         transactions: state.transactions + transactions,
       )),
     );
@@ -50,7 +51,7 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
   ) async {
     emit(
       state.copyWith(
-        previousSearchParam: () =>
+        searchParam: () =>
             event.searchParam.isNotEmpty ? event.searchParam : null,
       ),
     );
@@ -69,7 +70,7 @@ class TransactionsBloc extends Bloc<TransactionsEvent, TransactionsState> {
       )),
       (transactions) => emit(state.copyWith(
         status: AppStatus.success,
-        shouldFetchMore: transactions.length < 10,
+        shouldFetchMore: transactions.length >= 10,
         transactions: transactions,
       )),
     );

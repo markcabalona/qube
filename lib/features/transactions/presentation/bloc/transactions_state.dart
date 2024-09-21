@@ -15,21 +15,24 @@ class TransactionsState extends Equatable {
   });
 
   @override
-  List<Object> get props => [...transactions, status];
+  List<Object?> get props => [
+        ...transactions,
+        status,
+        searchParam,
+        shouldFetchMore,
+      ];
 
   TransactionsState copyWith({
     List<Transaction>? transactions,
     AppStatus? status,
     bool? shouldFetchMore,
-    ValueGetter<String?>? previousSearchParam,
+    ValueGetter<String?>? searchParam,
   }) {
     return TransactionsState(
       transactions: transactions ?? this.transactions,
       status: status ?? this.status,
       shouldFetchMore: shouldFetchMore ?? this.shouldFetchMore,
-      searchParam: previousSearchParam != null
-          ? previousSearchParam()
-          : this.searchParam,
+      searchParam: searchParam != null ? searchParam() : this.searchParam,
     );
   }
 }
