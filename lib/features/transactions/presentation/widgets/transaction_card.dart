@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qube/core/extensions/date_time_extension.dart';
+import 'package:qube/core/router/qube_router.dart';
+import 'package:qube/core/router/routes/qube_routes.dart';
 import 'package:qube/core/widgets/dot_icon.dart';
 import 'package:qube/core/widgets/gradient_wrapper.dart';
 import 'package:qube/core/widgets/warning_icon.dart';
@@ -92,5 +94,9 @@ class TransactionCard extends StatelessWidget {
 
   void _onPressGoToStep2() {
     // TODO: Navigate to Step 2 Page
+    QubeRouter.go(
+      QubeRoutes.deliveryDetails,
+      extra: transaction,
+    );
   }
 }
