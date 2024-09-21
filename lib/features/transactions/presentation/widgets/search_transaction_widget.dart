@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:qube/core/utils/debounce.dart';
+import 'package:qube/features/transactions/presentation/bloc/transactions_bloc.dart';
 
 class SearchTransactionWidget extends StatefulWidget {
   const SearchTransactionWidget({
@@ -27,7 +29,11 @@ class _SearchTransactionWidgetState extends State<SearchTransactionWidget> {
       },
       onChanged: (value) {
         debounce.run(() {
-          // TODO: implement search here
+          GetIt.instance<TransactionsBloc>().add(
+            SearchTransactionsEvent(
+              searchParam: value,
+            ),
+          );
         });
       },
       decoration: InputDecoration(

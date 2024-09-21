@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:qube/core/widgets/gradient_wrapper.dart';
 import 'package:qube/core/widgets/qube_stepper_widget.dart';
+import 'package:qube/features/transactions/presentation/cubit/transaction_step_cubit.dart';
 import 'package:qube/features/transactions/presentation/widgets/search_transaction_widget.dart';
 
 class QubeHomePage extends StatelessWidget {
@@ -42,23 +45,32 @@ class QubeHomePage extends StatelessWidget {
             const SizedBox(height: 12),
             const SearchTransactionWidget(),
             const SizedBox(height: 12),
-            QubeStepperWidget(
-              index: 0,
-              children: List.generate(
-                2,
-                (index) => Text(
-                  'Step ${index + 1}',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
+            _buildStepperWidget(),
             const SizedBox(height: 12),
             Expanded(child: child),
           ],
         ),
       ),
+    );
+  }
+
+  BlocBuilder<TransactionStepCubit, TransactionStep> _buildStepperWidget() {
+    return BlocBuilder<TransactionStepCubit, TransactionStep>(
+      bloc: GetIt.instance(),
+      builder: (context, state) {
+        return QubeStepperWidget(
+          index: state.value,
+          children: List.generate(
+            2,
+            (index) => Text(
+              'Step ${index + 1}',
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
