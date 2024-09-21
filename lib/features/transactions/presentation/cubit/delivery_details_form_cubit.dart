@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:qube/core/enums/app_status.dart';
@@ -23,6 +25,13 @@ class DeliveryDetailsFormCubit extends Cubit<DeliveryDetailsFormState> {
     emit(state.copyWith(
       status: AppStatus.loading,
     ));
-    // TODO: do something with the form
+    await Future.delayed(
+      Duration(
+        milliseconds: Random().nextInt(2500),
+      ),
+    );
+    emit(state.copyWith(
+      status: AppStatus.success,
+    ));
   }
 }
