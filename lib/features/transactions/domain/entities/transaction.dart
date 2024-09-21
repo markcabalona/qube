@@ -11,6 +11,7 @@ class Transaction extends Equatable {
   final DateTime createdAt;
   final DateTime dueDate;
   final DateTime? completedAt;
+  final int stepNumber;
 
   const Transaction({
     required this.id,
@@ -21,6 +22,7 @@ class Transaction extends Equatable {
     required this.createdAt,
     required this.dueDate,
     this.completedAt,
+    this.stepNumber = 1,
   });
 
   @override
@@ -34,6 +36,7 @@ class Transaction extends Equatable {
       createdAt,
       dueDate,
       completedAt,
+      stepNumber,
     ];
   }
 }
