@@ -19,6 +19,7 @@ abstract class TransactionsRoutes {
     name: QubeRoutes.transactions.name,
     path: QubeRoutes.transactions.path,
     pageBuilder: (context, state) {
+      GetIt.instance<TransactionStepCubit>().goToStepOne();
       return const MaterialPage(
         child: TransactionsListPage(),
       );
